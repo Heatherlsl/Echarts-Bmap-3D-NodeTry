@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>My Echarts Dataset Try</title>
+    <!-- 引入 echarts.js -->
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <!-- <script src="js/echarts.min.js"></script> -->
+    <style>
+        body {
+            background-color: #0c274e;
+        }
+
+        .box {
+            float: left;
+            width: 33.3%;
+            height: 47vh;
+            border: 5px solid #000000;
+            box-sizing: border-box;
+        }
+
+        .cell {
+            float: left;
+            width: 49%;
+            height: 22vh;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div>
+        <div class="box" id="div2"></div>
+        <div class="box" id="div3"></div>
+        <div class="box" id="div4"></div>
+        <div class="box" id="div5"></div>
+        <div class="box" id="div6"></div>
+        <div class="box" id="div7">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+        <div class="box" id="div8"></div>
+        <div class="box" id="div9"></div>
+    </div>
+    <script type="text/javascript">
+        import $ from 'jquery';
+        import echarts from 'echarts';
+        $.getJSON("http://127.0.0.1:3000", "", function (sourceDta) {
+            console.log(sourceDta);
+            //开发区3-生产耗能柱状图
+            let myChart2 = echarts.init(document.getElementById('div2'));
+            let option2 = {
+                title: {
+                    text: '开发区3-生产耗能柱状图',
+                    left: 'center',
+                    textStyle: {
+                        color: '#45e1f9',
+                    },
+                },
+                color: ['#ff296a', '#56ffae'],
+                tooltip: {},
+                textStyle: {
+                    color: '#45e1f9',
+                },
+                legend: {
+                    right: '10px',
+                    orient: 'vertical',
+                    textStyle: {
+                        color: '#45e1f9',
+                    },
+                },
+                dataset: {
+                    source: sourceDta.data2,
+                },
+                xAxis: {
+                    name: "消耗量",
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: false
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    name: "耗能种类",
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    }
+                },
+                series: [{
+                    type: 'bar',
+                    seriesLayoutBy: 'row',
+                    barCategoryGap: '60%',
+                    label: {
+                        show: true,
+                        position: 'right'
+                    },
+                },
+                {
+                    type: 'bar',
+                    seriesLayoutBy: 'row',
+                    label: {
+                        show: true,
+                        position: 'right'
+                    },
+                }]
+            };
+            myChart2.setOption(option2);
+
+            //开发区4-空气质量监测堆叠柱状图
+            let rightOrWrongFormatter = data => {
+                let labelValue = data.value[data.seriesIndex + 1];
+                // console.log(data.data);
+                // console.log(data.componentIndex, data.seriesIndex, data.dataIndex);
+                // console.log("componentIndex",data.componentIndex,"seriesIndex",data.seriesIndex,"dataIndex",data.dataIndex);              
+                if (labelValue > 20) {
+                    return '√';
+                }
+                else {
+                    return '×';
+                }
+            }
+            let myChart3 = echarts.init(document.getElementById('div3'));
+            let option3 = {
+                title: {
+                    text: '开发区4-空气质量监测堆叠柱状图',
+                    textStyle: {
+                        color: '#FFFFFF',
+                        fontWeight: 'lighter'
+                    },
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: '10px',
+                    textStyle: {
+                        color: '#45e1f9',
+                        fontSize: '100%'//相对于default值12
+                    },
+                },
+                dataset: {
+                    source: sourceDta.data3
+                },
+                yAxis: {
+                    name: "企业",
+                    type: "category",
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    }
+                },
+                xAxis: {
+                    name: "消耗量",
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        "show": false
+                    }
+                },
+                color: ['#2a3e61', '#3c70c6', '#5baceb', '#c9c9d3'],
+                series: [
+                    {
+                        type: 'bar',
+                        stack: '总量',
+                        barCategoryGap: '60%',
+                        seriesLayoutBy: 'row',
+                        label: {
+                            show: true,
+                            formatter: rightOrWrongFormatter
+                        },
+                    },
+                    {
+                        type: 'bar',
+                        stack: '总量',
+                        seriesLayoutBy: 'row',
+                        label: {
+                            show: true,
+                            formatter: rightOrWrongFormatter
+                        },
+                    },
+                    {
+                        type: 'bar',
+                        stack: '总量',
+                        seriesLayoutBy: 'row',
+                        label: {
+                            show: true,
+                            formatter: rightOrWrongFormatter
+                        },
+                    },
+                    {
+                        type: 'bar',
+                        stack: '总量',
+                        seriesLayoutBy: 'row',
+                        label: {
+                            show: true,
+                            formatter: rightOrWrongFormatter
+                        },
+                    }]
+            };
+            myChart3.setOption(option3);
+
+            //开发区4-水质质量监测堆叠柱状图
+            let myChart4 = echarts.init(document.getElementById('div4'));
+            let option4 = {
+                title: {
+                    text: '开发区4-水质质量监测堆叠柱状图',
+                    textStyle: {
+                        color: '#FFFFFF'
+                    },
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: '10px',
+                    textStyle: {
+                        color: '#45e1f9',
+                        fontSize: '100%'//相对于default值12
+                    },
+                },
+                color: ['#392f92', '#6155b4', '#6273cd', '#72afe6', '#cdd7f2'],
+                dataset: {
+                    source: sourceDta.data4
+                },
+                xAxis: {
+                    name: "企业",
+                    type: 'category',
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    }
+                },
+                yAxis: {
+                    name: "排放量/吨",
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dotted'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'bar',
+                        stack: '总量',
+                        barCategoryGap: '60%',
+                        seriesLayoutBy: 'row',
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter: rightOrWrongFormatter
+                        },
+                    },
+                    {
+                        type: 'bar',
+                        stack: '总量',
+                        seriesLayoutBy: 'row',
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter: rightOrWrongFormatter
+                        },
+                    },
+                    {
+                        type: 'bar',
+                        stack: '总量',
+                        seriesLayoutBy: 'row',
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter: rightOrWrongFormatter
+                        },
+                    },
+                    {
+                        type: 'bar',
+                        stack: '总量',
+                        seriesLayoutBy: 'row',
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter: rightOrWrongFormatter
+                        },
+                    },
+                    {
+                        type: 'bar',
+                        stack: '总量',
+                        seriesLayoutBy: 'row',
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter: rightOrWrongFormatter
+                        },
+                    }
+                ]
+            };
+            myChart4.setOption(option4);
+
+            //开发区4-被举报数统计柱状图
+            let myChart5 = echarts.init(document.getElementById('div5'));
+            let option5 = {
+                title: {
+                    text: '开发区4-被举报数统计柱状图',
+                    textStyle: {
+                        color: '#FFFFFF'
+                    },
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                dataset: {
+                    source: sourceDta.data5
+                },
+                xAxis: {
+                    name: "企业",
+                    type: 'category',
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    }
+                },
+                yAxis: {
+                    name: "被举报次数",
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dotted'
+                        }
+                    }
+                },
+                color: ['#72afe6'],
+                series: [
+                    {
+                        type: 'bar',
+                        barCategoryGap: '80%',
+                        seriesLayoutBy: 'row',
+                        label: {
+                            show: true,
+                        },
+                    }
+                ]
+            };
+            myChart5.setOption(option5);
+
+            //开发区-企业总数行业统计饼图
+            let myChart6 = echarts.init(document.getElementById('div6'));
+            let option6 = {
+                title: {
+                    text: '开发区-企业总数行业统计饼图',
+                    textStyle: {
+                        color: '#FFFFFF'
+                    },
+                    left: 'center'
+                },
+                color: ['#EF74F3', '#DBEC4E', '#5BF7A6', '#F7547F', '#4582F7', '#53CACE'],
+                dataset: sourceDta.data6,
+                series: [
+                    {
+                        datasetIndex: 0,
+                        type: 'pie',
+                        color: ['#53CACE'],
+                        radius: ['43%', '43%'],
+                        label: {
+                            position: 'center',
+                            fontSize: 18
+                        },
+                        itemStyle: {
+                            //饼图半径为0+描边虚线样式实线虚线圈
+                            borderWidth: 2,
+                            borderColor: '#53CACE',
+                            borderType: 'dashed',
+                        },
+                        //关闭默认悬浮高亮
+                        hoverAnimation: false,
+                    },
+                    {
+                        datasetIndex: 1,
+                        type: 'pie',
+                        color: ['#53CACE'],
+                        radius: ['46%', '47%'],
+                        label: {
+                            show: false,
+                        },
+                        //关闭默认悬浮高亮
+                        hoverAnimation: false,
+                    },
+                    {
+                        datasetIndex: 2,
+                        type: 'pie',
+                        radius: ['50%', '70%'],
+                        label: {
+                            show: true,
+                            fontSize: 15,
+                            formatter: '{c}家',
+                        },
+                        hoverOffset: 10,
+                        emphasis: {
+                            label: {
+                                fontSize: '25',
+                                fontWeight: 'bold'
+                            },
+                            //使用描边模拟扇区整体平移
+                            itemStyle: {
+                                borderColor: '#0c274e',
+                                borderWidth: 7
+                            },
+                        },
+                    }
+                ]
+            };
+            myChart6.setOption(option6);
+
+            //开发区3-废物排放饼图
+            let rateFormatter = data => {
+                if (data.dataIndex == 0)
+                    return '达标率' + data.percent.toFixed(1) + "%";
+            }
+            let myChart70 = echarts.init(document.getElementById('div7').children[0]);
+            let option70 = {
+                title: {
+                    text: '气体排放量',
+                    textStyle: {
+                        color: '#53CACE'
+                    },
+                    left: 'center'
+                },
+                tooltip: {
+                    formatter: rateFormatter
+                },
+                series: [
+                    {
+                        name: '1',
+                        type: 'pie',
+                        radius: ['40%', '47%'],
+                        color: ['#53CACE'],
+                        label: {
+                            show: true,
+                            position: 'center',
+                            fontSize: 20
+                        },
+                        data: sourceDta.data70
+                    },
+                ]
+            };
+            myChart70.setOption(option70);
+            let myChart71 = echarts.init(document.getElementById('div7').children[1]);
+            let option71 = {
+                title: {
+                    text: '液体排放量',
+                    textStyle: {
+                        color: '#53CACE'
+                    },
+                    left: 'center'
+                },
+                tooltip: {
+                    formatter: rateFormatter
+                },
+                series: [
+                    {
+                        name: '1',
+                        type: 'pie',
+                        radius: ['40%', '47%'],
+                        color: ['#4582F7', '#0c274e',],
+                        label: {
+                            show: true,
+                            position: 'center',
+                            fontSize: 20
+                        },
+                        data: sourceDta.data71
+                    },
+                ]
+            };
+            myChart71.setOption(option71);
+            let myChart72 = echarts.init(document.getElementById('div7').children[2]);
+            let option72 = {
+                title: {
+                    text: '生活垃圾排放量',
+                    textStyle: {
+                        color: '#53CACE'
+                    },
+                    left: 'center'
+                },
+                tooltip: {
+                    formatter: rateFormatter
+                },
+                series: [
+                    {
+                        name: '1',
+                        type: 'pie',
+                        radius: ['40%', '47%'],
+                        color: ['#F7547F',],
+                        label: {
+                            show: true,
+                            position: 'center',
+                            fontSize: 20
+                        },
+                        data: sourceDta.data72
+                    },
+                ]
+            };
+            myChart72.setOption(option72);
+            let myChart73 = echarts.init(document.getElementById('div7').children[3]);
+            let option73 = {
+                title: {
+                    text: '其他排放量',
+                    textStyle: {
+                        color: '#53CACE'
+                    },
+                    left: 'center'
+                },
+                tooltip: {
+                    formatter: rateFormatter
+                },
+                series: [
+                    {
+                        name: '1',
+                        type: 'pie',
+                        radius: ['40%', '47%'],
+                        color: ['#DBEC4E', '#0c274e',],
+                        label: {
+                            show: true,
+                            position: 'center',
+                            fontSize: 20
+                        },
+                        data: sourceDta.data73
+                    },
+                ]
+            };
+            myChart73.setOption(option73);
+
+            //开发区-工业总产值折线图
+            let myChart8 = echarts.init(document.getElementById('div8'));
+            let option8 = {
+                title: {
+                    text: '开发区-工业总产值折线图',
+                    textStyle: {
+                        color: '#53CACE'
+                    },
+                    left: 'center'
+                },
+                dataset: {
+                    source: sourceDta.data9
+                },
+                xAxis: {
+                    name: '时间/年',
+                    type: 'category',
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                },
+                yAxis: {
+                    name: '总产量/亿元',
+                    type: 'value',
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#45e1f9',
+                            type: 'dotted'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'line',
+                        color: '#45e1f9',
+                        seriesLayoutBy: 'row',
+                        symbolSize: 0.1,
+                        label: {
+                            show: true,
+                            color: '#53CACE',
+                        },
+                        lineStyle: {
+                            opacity: 0.7
+                        },
+                        areaStyle: {
+                            // 线性渐变，前四个参数分别是 x0, y0, x2, y2, 范围从 0 - 1，相当于在图形包围盒中的百分比，如果 globalCoord 为 `true`，则该四个值是绝对的像素位置
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0, color: '#45e1f9' // 0% 处的颜色
+                                }, {
+                                    offset: 1, color: '#0c274e' // 100% 处的颜色
+                                }],
+                                // global: false // 缺省为 false
+                            }
+                        },
+                    }
+                ]
+            };
+            myChart8.setOption(option8);
+
+            //开发区2-压强时间平滑折线阴影图
+            let myChart9 = echarts.init(document.getElementById('div9'));
+            let option9 = {
+                title: {
+                    text: '开发区2-压强时间折线阴影图',
+                    textStyle: {
+                        color: '#53CACE'
+                    },
+                    left: 'center'
+                },
+                dataset: {
+                    source: sourceDta.data9
+                },
+                xAxis: {
+                    name: '时间/年',
+                    type: 'category',
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                },
+                yAxis: {
+                    name: '总产量/亿元',
+                    type: 'value',
+                    axisLine: {
+                        symbol: ['none', 'arrow'],
+                        symbolSize: [5, 5],
+                        lineStyle: {
+                            color: '#45e1f9'
+                        }
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            //坐标轴分割线颜色可配
+                            color: ['#0c274e', '#000000', '#45e1f9', '#F7547F', '#DBEC4E',],
+                            type: 'dotted'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'line',
+                        color: '#45e1f9',
+                        //平滑曲线过度
+                        smooth: true,
+                        seriesLayoutBy: 'row',
+                        itemStyle: {
+                            opacity: 0     //为0时不绘制拐点
+                        },
+                        lineStyle: {
+                            opacity: 0.8
+                        },
+                        areaStyle: {
+                            // 线性渐变，前四个参数分别是 x0, y0, x2, y2, 范围从 0 - 1，相当于在图形包围盒中的百分比，如果 globalCoord 为 `true`，则该四个值是绝对的像素位置
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0, color: '#45e1f9' // 0% 处的颜色
+                                }, {
+                                    offset: 1, color: '#0c274e' // 100% 处的颜色
+                                }],
+                                // global: false // 缺省为 false
+                            }
+                        },
+                    },
+                ]
+            };
+            myChart9.setOption(option9);
+
+            window.onresize = function () {
+                myChart2.resize();
+                myChart3.resize();
+                myChart4.resize();
+                myChart5.resize();
+                myChart6.resize();
+                myChart70.resize();
+                myChart71.resize();
+                myChart72.resize();
+                myChart73.resize();
+                myChart8.resize();
+                myChart9.resize();
+            }
+
+        });
+    </script>
+</body>
+
+</html>
