@@ -1,0 +1,23 @@
+{
+  "name": "echarts-bmap-3d-nodetry",
+  "version": "1.0.0",
+  "description": "my study collection",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Heatherlsl/Echarts-Bmap-3D-NodeTry.git"
+  },
+  "author": "1024735339@qq.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Heatherlsl/Echarts-Bmap-3D-NodeTry/issues"
+  },
+  "homepage": "https://github.com/Heatherlsl/Echarts-Bmap-3D-NodeTry#readme",
+  "dependencies": {
+    "echarts": "^4.2.1",
+    "jquery": "^3.4.1"
+  }
+}
