@@ -1,6 +1,5 @@
 const http = require('http');
 const fs = require('fs');
-const path = require('path');
 const server = http.createServer((req, res) => {
     switch (req.url) {
         case '/':
@@ -8,7 +7,9 @@ const server = http.createServer((req, res) => {
                 'Content-Type': 'text/html',
                 'Access-Control-Allow-Origin' : '*'
             });
-            res.end(fs.readFileSync('../json/data.json').toString());
+            // res.end('hell node');
+            // res.end(fs.readFileSync('../json/data.json').toString());
+            res.end(fs.readFileSync('././json/data.json').toString());
             break;
         default:
             res.writeHead(404, 'fail', {
@@ -17,4 +18,6 @@ const server = http.createServer((req, res) => {
             res.end('url not exist');
             break
     }
-}).listen(3000);
+}).listen(3000,function(){
+    console.log('server is running on 3000');
+});
