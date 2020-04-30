@@ -18,6 +18,6 @@
   "homepage": "https://github.com/Heatherlsl/Echarts-Bmap-3D-NodeTry#readme",
   "dependencies": {
     "echarts": "^4.2.1",
-    "jquery": "^3.4.1"
+    "jquery": "^3.5.0"
   }
 }
